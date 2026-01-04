@@ -30,34 +30,47 @@ int menu()
 	cin >> user_choice;
 	return user_choice;
 }
-void new_entry() 
+string new_entry_title()
 {
 	system("CLS");
 	string write;
 	cout << "to cancel enter X" << endl;
 	cout << "Create a title for the new entry" << endl;
-	cin.ignore();
-	getline(cin,write);
-	if (write == "X" || write == "x") 
-	{
-		menu();
-	}
-	else 
-	{
-		key << write << endl;
-		entry << write<<endl;
-	}
+	getline(cin, write);
+	return write;
+}
+string entry_note() 
+{
 	system("CLS");
 	string note;
 	cout << "to cancel enter X" << endl;
 	cout << "begin your entry:" << endl;
-	cin.ignore();
 	getline(cin, note);
-	if (note == "X" || note == "x")
-		menu();
-	else
-		entry << note << endl;
-	entry << " " << endl;
+	return note;
+}
+void helper() 
+{
+	int choice = menu();
+	if (choice == 1)
+	{
+		cin.ignore();
+		string title = new_entry_title();
+		if (title != "x" && title != "X")
+		{
+			key << title << endl;
+			entry << title << endl;
+			string note = entry_note();
+			if (note != "x" && note != "X")
+			{
+				entry << note << endl;
+				entry << " " << endl;
+			}
+			else
+				helper();
+		}
+		else
+			helper();
+	}
 }
 int main()
 {
@@ -66,9 +79,5 @@ int main()
 	{
 		passcode = login();
 	}
-	int choice = menu();
-	if (choice == 1)
-	{
-		new_entry();
-	}
+	helper();
 }
