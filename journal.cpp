@@ -2,11 +2,14 @@
 #include <fstream>
 #include <string>
 #define password "test123"
+#define dontcancel(x) x != "x" && x != "X"
 using namespace std;
 
 fstream entry("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entries.txt", fstream::app);
 fstream editing("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entries.txt");
 fstream key("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entry_key.txt", fstream::app);
+string hold_title = "";
+string hold_note = "";
 string login() 
 {
 	system("CLS");
@@ -18,7 +21,7 @@ string login()
 	cin >> enter;
 	return enter;
 }
-int menu() 
+int menu()
 {
 	system("CLS");
 	int user_choice = 0;
@@ -55,21 +58,32 @@ void helper()
 	{
 		cin.ignore();
 		string title = new_entry_title();
-		if (title != "x" && title != "X")
+		if (dontcancel(title))
 		{
-			key << title << endl;
-			entry << title << endl;
+			hold_title = title;
 			string note = entry_note();
-			if (note != "x" && note != "X")
+			if (dontcancel(note))
 			{
-				entry << note << endl;
-				entry << " " << endl;
+				hold_note = note;
 			}
 			else
+			{
 				helper();
+			}
 		}
 		else
+		{
 			helper();
+		}
+		if (dontcancel(hold_note) && dontcancel(hold_title))
+		{
+			entry << " " << endl;
+			entry << hold_title << endl;
+			key << hold_title << endl;
+			entry << hold_note << endl;
+		}
+		hold_note.clear();
+		hold_title.clear();
 	}
 }
 int main()
