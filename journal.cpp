@@ -44,6 +44,39 @@ string entry_part(int decide)
 	getline(cin, note);
 	return note;
 }
+string read(int part, string look) 
+{
+	system("CLS");
+	cin.ignore();
+	string lines = "";
+	if (part == 1)
+	{
+		cout << "Your previous entries:" << endl;
+		while (getline(key_read, lines))
+			cout << lines << endl;
+	}
+	
+	else 
+	{
+		string exit = "";
+		int parts = 0;
+		while (getline(editing, lines))
+		{
+			if (lines == look)
+			{
+				cout << "to return, enter" << endl;
+				cout << lines << endl;
+				parts++;
+			}
+			else if (parts == 1)
+			{
+				cout << lines << endl;
+				cin >> exit;
+			}
+		}
+	}
+	return "";
+}
 void helper() 
 {
 	int choice = menu();
@@ -73,38 +106,15 @@ void helper()
 	else if (choice == 2) 
 	{
 		string user_choice;
-		string lines = "";
-		cout << "Your previous entries:" << endl;
-		while (getline(key_read, lines)) 
-		{
-			cout << lines << endl;
-		}
+		read(1, user_choice);
 		cout << "enter entry name to read" << endl;
 		cin >> user_choice;
-		lines = "";
-		int parts = 0;
-		string response;
-		system("CLS");
-		while (getline(editing, lines)) 
-		{
-			parts;
-			if (lines == user_choice)
-			{
-				cout << "to return, enter" << endl;
-				cout << lines << endl;
-				parts++;
-			}
-			else if (parts == 1)
-			{
-				cout << lines << endl;
-				cin.ignore();
-				getline(cin, response);
-				if (cancel(response))
-					helper();
-			}
-		}
+		string exit = read(2, user_choice);
+		if (cancel(exit))
+			helper();
 	}
 }
+
 int main()
 {
 	string passcode;
