@@ -2,13 +2,12 @@
 #include <fstream>
 #include <string>
 #define password "test123"
-#define cancel(x) x == ""
+#define notcancel(x) x != ""
 using namespace std;
 
 fstream entry("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entries.txt", fstream::app);
-fstream editing("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entries.txt");
+
 fstream key("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entry_key.txt", fstream::app);
-fstream key_read("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entry_key.txt");
 string login() 
 {
 	system("CLS");
@@ -50,14 +49,15 @@ string read(int part, string look)
 	string lines = "";
 	if (part == 1)
 	{
+		fstream key_read("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entry_key.txt");
 		cout << "Your previous entries:" << endl;
-		while (getline(key_read, lines))
-			cout << lines << endl;
+		for (string line; getline(key_read, line); )
+			cout << line << endl;
 	}
-	
 	else 
 	{
-		string exit = "";
+		fstream editing("C:\\Users\\user\\Desktop\\PROJEKTY\\CPP\\journal\\journal\\entries.txt");
+		string out;
 		int parts = 0;
 		while (getline(editing, lines))
 		{
@@ -69,10 +69,14 @@ string read(int part, string look)
 			}
 			else if (parts == 1)
 			{
-				cout << lines << endl;
 				parts = 0;
-				cin >> exit;
-				return exit;
+				cout << lines << endl;
+				cin.ignore();
+				getline(cin, out);
+				if (out == "")
+					return out;
+				else
+					return out;
 			}
 		}
 	}
@@ -86,14 +90,10 @@ void helper()
 	{
 		cin.ignore();
 		string title = entry_part(1);
-		if (cancel(title))
-			helper();
-		else 
+		if(notcancel(title))
 		{
 			string note = entry_part(2);
-			if (cancel(note))
-				helper();
-			else if (note != "") 
+			if (notcancel(note))
 			{
 				entry << title << endl;
 				key << title << endl;
@@ -109,11 +109,7 @@ void helper()
 		read(1, user_choice);
 		cout << "enter entry name to read" << endl;
 		cin >> user_choice;
-		string exit = read(2, user_choice);
-		if (cancel(exit)) 
-		{
-			helper();
-		}
+		read(2, user_choice);
 	}
 }
 
