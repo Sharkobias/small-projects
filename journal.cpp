@@ -39,7 +39,7 @@ string entry_part(int decide)
 	cout << "to cancel, enter" << endl;
 	if(decide == 2)
 		cout << "begin your entry:" << endl;
-	else
+	else if(decide == 1)
 		cout << "Create a title for the new entry" << endl;
 	getline(cin, note);
 	return note;
@@ -47,7 +47,6 @@ string entry_part(int decide)
 string read(int part, string look) 
 {
 	system("CLS");
-	cin.ignore();
 	string lines = "";
 	if (part == 1)
 	{
@@ -71,7 +70,9 @@ string read(int part, string look)
 			else if (parts == 1)
 			{
 				cout << lines << endl;
+				parts = 0;
 				cin >> exit;
+				return exit;
 			}
 		}
 	}
@@ -85,22 +86,21 @@ void helper()
 	{
 		cin.ignore();
 		string title = entry_part(1);
-		string note = entry_part(2);
 		if (cancel(title))
-		{
 			helper();
-		}
-		else if (cancel(note))
+		else 
 		{
-			helper();
+			string note = entry_part(2);
+			if (cancel(note))
+				helper();
+			else if (note != "") 
+			{
+				entry << title << endl;
+				key << title << endl;
+				entry << note << endl;
+			}
+			note.clear();
 		}
-		if (note != "" || title != "")
-		{
-			entry << title << endl;
-			key << title << endl;
-			entry << note << endl;
-		}
-		note.clear();
 		title.clear();
 	}
 	else if (choice == 2) 
@@ -110,8 +110,10 @@ void helper()
 		cout << "enter entry name to read" << endl;
 		cin >> user_choice;
 		string exit = read(2, user_choice);
-		if (cancel(exit))
+		if (cancel(exit)) 
+		{
 			helper();
+		}
 	}
 }
 
